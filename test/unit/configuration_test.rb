@@ -28,7 +28,9 @@ class ConfiguratorTest < IntegrityTest
     assert_equal "foo.com", Integrity.config.base_url.host
 
     Integrity.configure { |c| c.base_url = nil }
+    stub(Integrity).warn(anything)
     assert_nothing_raised(RuntimeError) { Integrity.app }
+    assert_received(Integrity) {|subject| subject.warn("the base_url setting isn't set") }
   end
 
   test "logging" do

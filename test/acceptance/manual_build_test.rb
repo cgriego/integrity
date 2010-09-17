@@ -1,3 +1,4 @@
+require "active_record"
 require "helper/acceptance"
 
 class ManualBuildTest < Test::Unit::AcceptanceTestCase
@@ -163,7 +164,11 @@ class ManualBuildTest < Test::Unit::AcceptanceTestCase
       FileUtils.rm_f("dj.db")
 
       Integrity.configure { |c|
-        c.builder   = :dj, {:adapter => "sqlite3", :database => "dj.db"}
+        ActiveRecord::Schema.suppress_messages do
+          ActiveSupport::Deprecation.silence do
+            c.builder = :dj, {:adapter => "sqlite3", :database => "dj.db"}
+          end
+        end
       }
 
       repo = git_repo(:my_test_project)
