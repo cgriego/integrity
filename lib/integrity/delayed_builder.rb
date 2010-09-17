@@ -1,3 +1,4 @@
+require "active_record"
 require "delayed_job"
 
 module Integrity
